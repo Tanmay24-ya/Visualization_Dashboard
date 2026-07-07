@@ -45,7 +45,15 @@ export default function RegionChart({
             width={120}
             tick={{ fill: "#94a3b8", fontSize: 11 }}
           />
-          <Tooltip />
+          <Tooltip
+            contentStyle={{
+              background: "#0f172a",
+              border: "1px solid #334155",
+              borderRadius: "8px",
+              color: "#f8fafc",
+            }}
+            cursor={{ fill: "rgba(255, 255, 255, 0.05)" }}
+          />
           <Bar dataKey="count" fill="#22c55e" radius={[0, 6, 6, 0]} cursor="pointer" />
         </BarChart>
       </ResponsiveContainer>

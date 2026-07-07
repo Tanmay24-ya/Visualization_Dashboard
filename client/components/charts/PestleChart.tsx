@@ -37,7 +37,15 @@ export default function PestleChart({
           <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
           <XAxis dataKey="name" tick={{ fill: "#94a3b8", fontSize: 11 }} />
           <YAxis tick={{ fill: "#94a3b8" }} />
-          <Tooltip />
+          <Tooltip
+            contentStyle={{
+              background: "#0f172a",
+              border: "1px solid #334155",
+              borderRadius: "8px",
+              color: "#f8fafc",
+            }}
+            cursor={{ fill: "rgba(255, 255, 255, 0.05)" }}
+          />
           <Bar dataKey="count" fill="#8b5cf6" radius={[6, 6, 0, 0]} cursor="pointer" />
         </BarChart>
       </ResponsiveContainer>

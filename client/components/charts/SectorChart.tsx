@@ -45,7 +45,14 @@ export default function SectorChart({
               <Cell key={index} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>
-          <Tooltip />
+          <Tooltip
+            contentStyle={{
+              background: "#0f172a",
+              border: "1px solid #334155",
+              borderRadius: "8px",
+              color: "#f8fafc",
+            }}
+          />
           <Legend />
         </PieChart>
       </ResponsiveContainer>

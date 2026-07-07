@@ -34,7 +34,7 @@ export default function TimelineChart({
     .sort((a, b) => Number(a.year) - Number(b.year));
 
   return (
-    <div className="h-[400px] rounded-2xl border border-slate-800 bg-slate-900 p-6">
+    <div className="h-[400px] rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md p-6 shadow-lg shadow-slate-950/20 hover:border-slate-700/80 transition-all duration-300">
       <h2 className="mb-1 text-lg font-semibold">Intelligence Timeline</h2>
       <p className="mb-4 text-xs text-slate-500">Click a data point to filter by year</p>
       <ResponsiveContainer width="100%" height="85%">
@@ -59,6 +59,7 @@ export default function TimelineChart({
               background: "#0f172a",
               border: "1px solid #334155",
               borderRadius: "8px",
+              color: "#f8fafc",
             }}
           />
           <Area
