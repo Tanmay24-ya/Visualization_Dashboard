@@ -70,7 +70,7 @@ export default function RelevanceChart({
             data={chartData}
             fill="#06b6d4"
             cursor="pointer"
-            onClick={(entry) => {
+            onClick={(entry: any) => {
               if (entry.topic && onTopicSelect) {
                 onTopicSelect(entry.topic);
               }

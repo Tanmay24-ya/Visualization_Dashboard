@@ -61,7 +61,7 @@ export default function Dashboard() {
 
   // Drill-down drawer state
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [drawerType, setDrawerType] = useState<"sector" | "topic" | "region" | "country" | "pestle" | "">("");
+  const [drawerType, setDrawerType] = useState<"sector" | "topic" | "region" | "country" | "pestle" | "end_year" | "">("");
   const [drawerValue, setDrawerValue] = useState("");
 
   const [filters, setFilters] = useState<DashboardFilters>({
@@ -185,7 +185,7 @@ export default function Dashboard() {
   }, [filteredData]);
 
   // Click handler linking chart select → set filter state AND open detail drawer
-  const selectFilterAndDrillDown = (key: "sector" | "topic" | "region" | "country" | "pestle") => (value: string) => {
+  const selectFilterAndDrillDown = (key: "sector" | "topic" | "region" | "country" | "pestle" | "end_year") => (value: string) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
     setDrawerType(key);
     setDrawerValue(value);

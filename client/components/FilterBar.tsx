@@ -3,7 +3,9 @@
 import { useEffect, useState, useMemo } from "react";
 import { RotateCcw, Search, ChevronDown, ChevronUp, SlidersHorizontal } from "lucide-react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+export const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  "http://localhost:5000";
 
 export interface DashboardFilters {
   start_year: string;
@@ -105,11 +107,10 @@ export default function FilterBar({ filters, setFilters, allData }: Props) {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowMore(!showMore)}
-            className={`flex items-center gap-2 rounded-xl border px-4.5 py-2.5 text-xs font-semibold uppercase tracking-wider transition-all duration-200 cursor-pointer ${
-              showMore 
-                ? "border-indigo-500 bg-indigo-500/15 text-indigo-300 shadow-md shadow-indigo-500/5" 
-                : "border-slate-700/80 bg-slate-800/80 text-slate-300 hover:bg-slate-700"
-            }`}
+            className={`flex items-center gap-2 rounded-xl border px-4.5 py-2.5 text-xs font-semibold uppercase tracking-wider transition-all duration-200 cursor-pointer ${showMore
+              ? "border-indigo-500 bg-indigo-500/15 text-indigo-300 shadow-md shadow-indigo-500/5"
+              : "border-slate-700/80 bg-slate-800/80 text-slate-300 hover:bg-slate-700"
+              }`}
           >
             <SlidersHorizontal size={13} />
             {showMore ? "Fewer Filters" : "More Filters"}

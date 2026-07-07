@@ -39,7 +39,7 @@ export default function SectorChart({
             outerRadius={100}
             paddingAngle={3}
             cursor="pointer"
-            onClick={(entry) => onSectorSelect?.(entry.name)}
+            onClick={(entry: any) => onSectorSelect?.(entry.name)}
           >
             {chartData.map((_, index) => (
               <Cell key={index} fill={COLORS[index % COLORS.length]} />

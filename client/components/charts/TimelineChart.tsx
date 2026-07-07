@@ -40,7 +40,7 @@ export default function TimelineChart({
       <ResponsiveContainer width="100%" height="85%">
         <AreaChart
           data={chartData}
-          onClick={(e) => {
+          onClick={(e: any) => {
             const year = e?.activePayload?.[0]?.payload?.year;
             if (year && onYearSelect) onYearSelect(year);
           }}

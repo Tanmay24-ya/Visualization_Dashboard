@@ -32,7 +32,7 @@ export default function TopicChart({
       <ResponsiveContainer width="100%" height="85%">
         <BarChart
           data={chartData}
-          onClick={(e) => {
+          onClick={(e: any) => {
             const name = e?.activePayload?.[0]?.payload?.topic;
             if (name && onTopicSelect) onTopicSelect(name);
           }}

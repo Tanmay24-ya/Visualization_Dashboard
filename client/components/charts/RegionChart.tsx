@@ -32,7 +32,7 @@ export default function RegionChart({
           data={chartData}
           layout="vertical"
           margin={{ left: 40, right: 20 }}
-          onClick={(e) => {
+          onClick={(e: any) => {
             const name = e?.activePayload?.[0]?.payload?.region;
             if (name && onRegionSelect) onRegionSelect(name);
           }}

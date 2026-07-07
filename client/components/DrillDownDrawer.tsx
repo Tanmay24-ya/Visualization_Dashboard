@@ -7,7 +7,7 @@ import { X, Calendar, MapPin, Award, Activity, ExternalLink } from "lucide-react
 interface DrillDownDrawerProps {
   isOpen: boolean;
   onClose: () => void;
-  type: "sector" | "topic" | "region" | "country" | "pestle" | "";
+  type: "sector" | "topic" | "region" | "country" | "pestle" | "end_year" | "";
   value: string;
   allData: Insight[];
 }

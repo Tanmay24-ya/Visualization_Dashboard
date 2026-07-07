@@ -38,7 +38,7 @@ export default function CountryChart({
           data={chartData}
           layout="vertical"
           margin={{ left: 20, right: 20 }}
-          onClick={(e) => {
+          onClick={(e: any) => {
             const name = e?.activePayload?.[0]?.payload?.country;
             if (name && onCountrySelect) onCountrySelect(name);
           }}
