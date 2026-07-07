@@ -1,7 +1,7 @@
 "use client";
 
 import { Insight } from "@/types/insight";
-import { Lightbulb, Info } from "lucide-react";
+import { Lightbulb, TrendingUp, Sparkles, AlertTriangle, Layers } from "lucide-react";
 import { useMemo } from "react";
 
 export default function KeyInsights({ data }: { data: Insight[] }) {
@@ -13,11 +13,9 @@ export default function KeyInsights({ data }: { data: Insight[] }) {
     const regionCount: Record<string, number> = {};
     const pestleCount: Record<string, number> = {};
 
-    // For average relevance per topic
     const topicRelevanceSum: Record<string, number> = {};
     const topicRelevanceCount: Record<string, number> = {};
 
-    // For average intensity per region
     const regionIntensitySum: Record<string, number> = {};
     const regionIntensityCount: Record<string, number> = {};
 
@@ -48,14 +46,12 @@ export default function KeyInsights({ data }: { data: Insight[] }) {
     const topRegion = getTop(regionCount);
     const topPestle = getTop(pestleCount);
 
-    // Calculate highest average relevance topic
     const topicAvgRelevance = Object.entries(topicRelevanceCount).map(([topic, count]) => {
       const avg = topicRelevanceSum[topic] / count;
       return { topic, avg };
     });
     const highestRelevanceTopic = topicAvgRelevance.sort((a, b) => b.avg - a.avg)[0];
 
-    // Calculate region with highest average intensity
     const regionAvgIntensity = Object.entries(regionIntensityCount).map(([region, count]) => {
       const avg = regionIntensitySum[region] / count;
       return { region, avg };
@@ -66,38 +62,72 @@ export default function KeyInsights({ data }: { data: Insight[] }) {
       ? ((topSector[1] / data.length) * 100).toFixed(1)
       : "0";
 
-    const bullet1 = topSector
-      ? <><strong>{topSector[0]}</strong> leads sector activity with <strong>{topSector[1]}</strong> signals, accounting for <strong>{sectorPercentage}%</strong> of the current selection.</>
-      : null;
+    const items = [];
 
-    const bullet2 = highestIntensityRegion
-      ? <><strong>{highestIntensityRegion.region}</strong> shows the highest concentration of average signal intensity (score: <strong>{highestIntensityRegion.avg.toFixed(1)}</strong>).</>
-      : null;
+    if (topSector) {
+      items.push({
+        title: "Sector Concentration",
+        content: <><strong>{topSector[0]}</strong> leads sector activity with <strong>{topSector[1]}</strong> signals, accounting for <strong>{sectorPercentage}%</strong> of the current selection.</>,
+        icon: <Layers size={14} className="text-indigo-400" />,
+        border: "border-indigo-500/10",
+        bg: "bg-indigo-500/5",
+      });
+    }
 
-    const bullet3 = topTopic && highestRelevanceTopic
-      ? <><strong>{topTopic[0]}</strong> is the dominant topic, while <strong>{highestRelevanceTopic.topic}</strong> has the highest average relevance (score: <strong>{highestRelevanceTopic.avg.toFixed(1)}</strong>).</>
-      : null;
+    if (highestIntensityRegion) {
+      items.push({
+        title: "Signal Strength",
+        content: <><strong>{highestIntensityRegion.region}</strong> shows the highest concentration of average signal intensity (score: <strong>{highestIntensityRegion.avg.toFixed(1)}</strong>).</>,
+        icon: <TrendingUp size={14} className="text-amber-400" />,
+        border: "border-amber-500/10",
+        bg: "bg-amber-500/5",
+      });
+    }
 
-    const bullet4 = topPestle
-      ? <><strong>{topPestle[0]}</strong> PESTLE signals dominate the strategic composition with <strong>{topPestle[1]}</strong> records.</>
-      : null;
+    if (topTopic && highestRelevanceTopic) {
+      items.push({
+        title: "Top Domain Insights",
+        content: <><strong>{topTopic[0]}</strong> is the dominant topic, while <strong>{highestRelevanceTopic.topic}</strong> has the highest average relevance (score: <strong>{highestRelevanceTopic.avg.toFixed(1)}</strong>).</>,
+        icon: <Sparkles size={14} className="text-cyan-400" />,
+        border: "border-cyan-500/10",
+        bg: "bg-cyan-500/5",
+      });
+    }
 
-    return [bullet1, bullet2, bullet3, bullet4].filter(Boolean);
+    if (topPestle) {
+      items.push({
+        title: "PESTLE Outlook",
+        content: <><strong>{topPestle[0]}</strong> PESTLE signals dominate the strategic composition with <strong>{topPestle[1]}</strong> records.</>,
+        icon: <AlertTriangle size={14} className="text-green-400" />,
+        border: "border-green-500/10",
+        bg: "bg-green-500/5",
+      });
+    }
+
+    return items;
   }, [data]);
 
   if (!insights.length) return null;
 
   return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6">
+    <div className="rounded-2xl border border-slate-800/80 bg-slate-900/40 p-6 backdrop-blur-md">
       <div className="mb-4 flex items-center gap-2">
-        <Lightbulb size={18} className="text-amber-400 animate-pulse" />
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-300">Executive Summary</h2>
+        <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-amber-500/10 text-amber-400">
+          <Lightbulb size={14} className="animate-pulse" />
+        </div>
+        <h2 className="text-xs font-bold uppercase tracking-widest text-slate-300">Executive Overview Summary</h2>
       </div>
-      <div className="grid gap-3 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {insights.map((insight, i) => (
-          <div key={i} className="flex items-start gap-2.5 rounded-xl bg-slate-950/30 p-3.5 text-xs text-slate-300 border border-slate-850">
-            <Info size={14} className="mt-0.5 text-indigo-400 flex-shrink-0" />
-            <p className="leading-relaxed">{insight}</p>
+          <div 
+            key={i} 
+            className={`flex flex-col gap-2.5 rounded-xl border p-4 transition-all duration-300 hover:scale-[1.01] ${insight.border} ${insight.bg}`}
+          >
+            <div className="flex items-center gap-2 text-slate-400 font-semibold text-[10px] uppercase tracking-wider">
+              {insight.icon}
+              {insight.title}
+            </div>
+            <p className="text-xs text-slate-300 leading-relaxed font-medium">{insight.content}</p>
           </div>
         ))}
       </div>

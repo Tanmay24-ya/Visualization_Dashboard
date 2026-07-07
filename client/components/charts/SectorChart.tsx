@@ -26,7 +26,7 @@ export default function SectorChart({
     .slice(0, 7);
 
   return (
-    <div className="h-[400px] rounded-2xl border border-slate-800 bg-slate-900 p-6">
+    <div className="h-[400px] rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md p-6 shadow-lg shadow-slate-950/20 hover:border-slate-700/80 transition-all duration-300">
       <h2 className="mb-1 text-lg font-semibold">Sector Distribution</h2>
       <p className="mb-2 text-xs text-slate-500">Click a slice to filter by sector</p>
       <ResponsiveContainer width="100%" height="85%">

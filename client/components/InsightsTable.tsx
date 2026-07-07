@@ -4,8 +4,6 @@ import { useState, useMemo } from "react";
 import { Insight } from "@/types/insight";
 import { Search, Download, ArrowUpDown, ExternalLink } from "lucide-react";
 
-const PAGE_SIZE = 10;
-
 type SortKey = "intensity" | "likelihood" | "relevance";
 
 function exportCSV(data: Insight[]) {
@@ -34,6 +32,7 @@ function exportCSV(data: Insight[]) {
 export default function InsightsTable({ data }: { data: Insight[] }) {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [sortKey, setSortKey] = useState<SortKey>("intensity");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
 
@@ -43,7 +42,8 @@ export default function InsightsTable({ data }: { data: Insight[] }) {
       (d) =>
         (d.title || "").toLowerCase().includes(q) ||
         (d.topic || "").toLowerCase().includes(q) ||
-        (d.country || "").toLowerCase().includes(q)
+        (d.country || "").toLowerCase().includes(q) ||
+        (d.source || "").toLowerCase().includes(q)
     );
   }, [data, search]);
 
@@ -55,8 +55,8 @@ export default function InsightsTable({ data }: { data: Insight[] }) {
     });
   }, [filtered, sortKey, sortDir]);
 
-  const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
-  const paginated = sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const totalPages = Math.max(1, Math.ceil(sorted.length / pageSize));
+  const paginated = sorted.slice((page - 1) * pageSize, page * pageSize);
 
   const toggleSort = (key: SortKey) => {
     if (sortKey === key) {
@@ -69,34 +69,51 @@ export default function InsightsTable({ data }: { data: Insight[] }) {
   };
 
   const SortBtn = ({ k }: { k: SortKey }) => (
-    <button onClick={() => toggleSort(k)} className="ml-1 inline-flex opacity-60 hover:opacity-100">
+    <button onClick={() => toggleSort(k)} className="ml-1 inline-flex opacity-60 hover:opacity-100 cursor-pointer">
       <ArrowUpDown size={12} />
     </button>
   );
 
   return (
-    <div className="mt-6 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900">
+    <div className="mt-6 overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md shadow-xl">
       {/* Header */}
-      <div className="flex flex-col gap-3 border-b border-slate-800 p-6 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 border-b border-slate-800/80 p-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-lg font-semibold">Insights Table</h2>
-          <p className="text-xs text-slate-400">{filtered.length} records</p>
+          <h2 className="text-lg font-bold text-slate-100">Signal Explorer</h2>
+          <p className="text-xs text-slate-400">Reviewing {filtered.length} matches from {data.length} total signals</p>
         </div>
-        <div className="flex gap-2">
-          <div className="flex items-center gap-2 rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm">
-            <Search size={14} className="text-slate-400" />
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Page size selector */}
+          <div className="flex items-center gap-2 text-xs text-slate-400">
+            <span>Show:</span>
+            <select
+              value={pageSize}
+              onChange={(e) => { setPageSize(Number(e.target.value)); setPage(1); }}
+              className="rounded-lg border border-slate-700/60 bg-slate-950 px-2 py-1.5 text-xs text-slate-300 outline-none focus:border-indigo-500"
+            >
+              <option value={10}>10 rows</option>
+              <option value={25}>25 rows</option>
+              <option value={50}>50 rows</option>
+            </select>
+          </div>
+
+          {/* Table search */}
+          <div className="flex items-center gap-2 rounded-xl border border-slate-700/60 bg-slate-950/60 px-3 py-1.5 text-xs">
+            <Search size={13} className="text-slate-400" />
             <input
               value={search}
               onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-              placeholder="Search title, topic, country…"
-              className="w-48 bg-transparent text-white placeholder-slate-500 outline-none"
+              placeholder="Filter list..."
+              className="w-36 bg-transparent text-slate-100 placeholder-slate-500 outline-none"
             />
           </div>
+
+          {/* Export CSV button */}
           <button
             onClick={() => exportCSV(sorted)}
-            className="flex items-center gap-2 rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm hover:bg-slate-700 transition-colors"
+            className="flex items-center gap-1.5 rounded-xl border border-slate-700/80 bg-slate-800/80 px-3.5 py-1.5 text-xs font-semibold hover:bg-slate-700 hover:text-white transition-colors cursor-pointer"
           >
-            <Download size={14} />
+            <Download size={13} />
             Export CSV
           </button>
         </div>
@@ -104,56 +121,56 @@ export default function InsightsTable({ data }: { data: Insight[] }) {
 
       {/* Table */}
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-sm">
-          <thead className="bg-slate-950 text-slate-400">
+        <table className="w-full text-left text-xs">
+          <thead className="bg-slate-950/70 text-slate-450 uppercase tracking-wider text-[10px] font-bold">
             <tr>
-              <th className="p-4 font-medium">Title</th>
-              <th className="p-4 font-medium">Topic</th>
-              <th className="p-4 font-medium">Country</th>
-              <th className="p-4 font-medium">
+              <th className="p-4 font-bold border-b border-slate-800">Title</th>
+              <th className="p-4 font-bold border-b border-slate-800">Topic</th>
+              <th className="p-4 font-bold border-b border-slate-800">Country</th>
+              <th className="p-4 font-bold border-b border-slate-800">
                 Intensity <SortBtn k="intensity" />
               </th>
-              <th className="p-4 font-medium">
+              <th className="p-4 font-bold border-b border-slate-800">
                 Likelihood <SortBtn k="likelihood" />
               </th>
-              <th className="p-4 font-medium">
+              <th className="p-4 font-bold border-b border-slate-800">
                 Relevance <SortBtn k="relevance" />
               </th>
-              <th className="p-4 font-medium">Source</th>
+              <th className="p-4 font-bold border-b border-slate-800">Source</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-slate-850">
             {paginated.length === 0 ? (
               <tr>
-                <td colSpan={7} className="p-10 text-center text-slate-500">
-                  No matching insights found.
+                <td colSpan={7} className="p-12 text-center text-slate-500 text-sm">
+                  No signals found matching your current query.
                 </td>
               </tr>
             ) : (
               paginated.map((item) => (
                 <tr
                   key={item._id}
-                  className="border-t border-slate-800 transition-colors hover:bg-slate-800/50"
+                  className="transition-colors hover:bg-slate-800/25"
                 >
                   <td className="max-w-xs p-4">
-                    <span title={item.title} className="line-clamp-2 block">
+                    <span title={item.title} className="line-clamp-2 font-medium text-slate-200">
                       {item.title || "—"}
                     </span>
                   </td>
-                  <td className="p-4 text-slate-300">{item.topic || "N/A"}</td>
-                  <td className="p-4 text-slate-300">{item.country || "Global"}</td>
+                  <td className="p-4 text-slate-300 font-semibold">{item.topic || "N/A"}</td>
+                  <td className="p-4 text-slate-350">{item.country || "Global"}</td>
                   <td className="p-4">
-                    <span className="rounded-full bg-indigo-500/10 px-2 py-0.5 text-xs font-medium text-indigo-300">
+                    <span className="inline-block rounded-full bg-indigo-500/10 px-2.5 py-0.5 text-[10px] font-bold text-indigo-300 border border-indigo-500/10">
                       {item.intensity || 0}
                     </span>
                   </td>
                   <td className="p-4">
-                    <span className="rounded-full bg-cyan-500/10 px-2 py-0.5 text-xs font-medium text-cyan-300">
+                    <span className="inline-block rounded-full bg-cyan-500/10 px-2.5 py-0.5 text-[10px] font-bold text-cyan-300 border border-cyan-500/10">
                       {item.likelihood || 0}
                     </span>
                   </td>
                   <td className="p-4">
-                    <span className="rounded-full bg-green-500/10 px-2 py-0.5 text-xs font-medium text-green-300">
+                    <span className="inline-block rounded-full bg-green-500/10 px-2.5 py-0.5 text-[10px] font-bold text-green-300 border border-green-500/10">
                       {item.relevance || 0}
                     </span>
                   </td>
@@ -163,7 +180,7 @@ export default function InsightsTable({ data }: { data: Insight[] }) {
                         href={item.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1 hover:text-indigo-400 transition-colors"
+                        className="inline-flex items-center gap-1 hover:text-indigo-400 transition-colors underline decoration-slate-700 hover:decoration-indigo-400"
                       >
                         {item.source || "Link"} <ExternalLink size={11} />
                       </a>
@@ -179,16 +196,16 @@ export default function InsightsTable({ data }: { data: Insight[] }) {
       </div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-between border-t border-slate-800 px-6 py-4">
+      <div className="flex flex-col gap-4 items-center justify-between border-t border-slate-800/80 px-6 py-4 sm:flex-row">
         <p className="text-xs text-slate-400">
-          Showing {Math.min((page - 1) * PAGE_SIZE + 1, sorted.length)}–
-          {Math.min(page * PAGE_SIZE, sorted.length)} of {sorted.length}
+          Showing {Math.min((page - 1) * pageSize + 1, sorted.length)}–
+          {Math.min(page * pageSize, sorted.length)} of {sorted.length} records
         </p>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           <button
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page === 1}
-            className="rounded-lg border border-slate-700 px-3 py-1.5 text-xs disabled:opacity-40 hover:bg-slate-800 transition-colors"
+            className="rounded-lg border border-slate-700/60 px-3 py-1.5 text-xs font-semibold text-slate-300 disabled:opacity-40 hover:bg-slate-800 transition-all cursor-pointer"
           >
             Previous
           </button>
@@ -199,10 +216,10 @@ export default function InsightsTable({ data }: { data: Insight[] }) {
               <button
                 key={p}
                 onClick={() => setPage(p)}
-                className={`rounded-lg px-3 py-1.5 text-xs transition-colors ${
+                className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all cursor-pointer ${
                   p === page
-                    ? "bg-indigo-600 text-white"
-                    : "border border-slate-700 hover:bg-slate-800"
+                    ? "bg-indigo-600 text-white shadow-md shadow-indigo-650/20"
+                    : "border border-slate-700/60 text-slate-300 hover:bg-slate-800"
                 }`}
               >
                 {p}
@@ -212,7 +229,7 @@ export default function InsightsTable({ data }: { data: Insight[] }) {
           <button
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             disabled={page === totalPages}
-            className="rounded-lg border border-slate-700 px-3 py-1.5 text-xs disabled:opacity-40 hover:bg-slate-800 transition-colors"
+            className="rounded-lg border border-slate-700/60 px-3 py-1.5 text-xs font-semibold text-slate-300 disabled:opacity-40 hover:bg-slate-800 transition-all cursor-pointer"
           >
             Next
           </button>

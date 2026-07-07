@@ -32,7 +32,7 @@ export default function DataCoverage({ data }: { data: Insight[] }) {
   });
 
   return (
-    <div className="h-[400px] rounded-2xl border border-slate-800 bg-slate-900 p-6">
+    <div className="h-[400px] rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md p-6 shadow-lg shadow-slate-950/20 hover:border-slate-700/80 transition-all duration-300">
       <h2 className="mb-1 text-lg font-semibold">Data Coverage</h2>
       <p className="mb-5 text-xs text-slate-500">Field completeness in current dataset</p>
       <div className="flex flex-col gap-4 overflow-y-auto" style={{ maxHeight: "300px" }}>
