@@ -1,8 +1,8 @@
 "use client";
 
 import {
-  LineChart,
-  Line,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -12,7 +12,13 @@ import {
 
 import { Insight } from "@/types/insight";
 
-export default function TimelineChart({ data }: { data: Insight[] }) {
+export default function TimelineChart({
+  data,
+  onYearSelect,
+}: {
+  data: Insight[];
+  onYearSelect?: (year: string) => void;
+}) {
   const yearCounts: Record<string, number> = {};
 
   data.forEach((item) => {
@@ -29,20 +35,42 @@ export default function TimelineChart({ data }: { data: Insight[] }) {
 
   return (
     <div className="h-[400px] rounded-2xl border border-slate-800 bg-slate-900 p-6">
-      <h2 className="mb-6 text-lg font-semibold">Insights Timeline</h2>
+      <h2 className="mb-1 text-lg font-semibold">Intelligence Timeline</h2>
+      <p className="mb-4 text-xs text-slate-500">Click a data point to filter by year</p>
       <ResponsiveContainer width="100%" height="85%">
-        <LineChart data={chartData}>
+        <AreaChart
+          data={chartData}
+          onClick={(e) => {
+            const year = e?.activePayload?.[0]?.payload?.year;
+            if (year && onYearSelect) onYearSelect(year);
+          }}
+        >
+          <defs>
+            <linearGradient id="colorTimeline" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.4} />
+              <stop offset="95%" stopColor="#f59e0b" stopOpacity={0} />
+            </linearGradient>
+          </defs>
           <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
           <XAxis dataKey="year" tick={{ fill: "#94a3b8" }} />
           <YAxis tick={{ fill: "#94a3b8" }} />
-          <Tooltip />
-          <Line
+          <Tooltip
+            contentStyle={{
+              background: "#0f172a",
+              border: "1px solid #334155",
+              borderRadius: "8px",
+            }}
+          />
+          <Area
             type="monotone"
             dataKey="insights"
             stroke="#f59e0b"
             strokeWidth={3}
+            fillOpacity={1}
+            fill="url(#colorTimeline)"
+            cursor="pointer"
           />
-        </LineChart>
+        </AreaChart>
       </ResponsiveContainer>
     </div>
   );

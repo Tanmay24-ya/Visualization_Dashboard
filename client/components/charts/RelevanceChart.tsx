@@ -13,7 +13,13 @@ import {
 
 import { Insight } from "@/types/insight";
 
-export default function RelevanceChart({ data }: { data: Insight[] }) {
+export default function RelevanceChart({
+  data,
+  onTopicSelect,
+}: {
+  data: Insight[];
+  onTopicSelect?: (topic: string) => void;
+}) {
   const chartData = data
     .filter((item) => item.likelihood && item.relevance && item.intensity)
     .map((item) => ({
@@ -25,7 +31,8 @@ export default function RelevanceChart({ data }: { data: Insight[] }) {
 
   return (
     <div className="h-[400px] rounded-2xl border border-slate-800 bg-slate-900 p-6">
-      <h2 className="mb-6 text-lg font-semibold">Likelihood vs Relevance</h2>
+      <h2 className="mb-1 text-lg font-semibold">Likelihood vs Relevance</h2>
+      <p className="mb-4 text-xs text-slate-500">Click a bubble to filter by its topic</p>
       <ResponsiveContainer width="100%" height="85%">
         <ScatterChart>
           <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
@@ -34,21 +41,40 @@ export default function RelevanceChart({ data }: { data: Insight[] }) {
             dataKey="likelihood"
             name="Likelihood"
             tick={{ fill: "#94a3b8" }}
+            domain={["auto", "auto"]}
           />
           <YAxis
             type="number"
             dataKey="relevance"
             name="Relevance"
             tick={{ fill: "#94a3b8" }}
+            domain={["auto", "auto"]}
           />
           <ZAxis
             type="number"
             dataKey="intensity"
-            range={[50, 500]}
+            range={[50, 450]}
             name="Intensity"
           />
-          <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-          <Scatter name="Insights" data={chartData} fill="#06b6d4" />
+          <Tooltip
+            cursor={{ strokeDasharray: "3 3" }}
+            contentStyle={{
+              background: "#0f172a",
+              border: "1px solid #334155",
+              borderRadius: "8px",
+            }}
+          />
+          <Scatter
+            name="Insights"
+            data={chartData}
+            fill="#06b6d4"
+            cursor="pointer"
+            onClick={(entry) => {
+              if (entry.topic && onTopicSelect) {
+                onTopicSelect(entry.topic);
+              }
+            }}
+          />
         </ScatterChart>
       </ResponsiveContainer>
     </div>
