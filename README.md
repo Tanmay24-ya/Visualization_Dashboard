@@ -6,6 +6,12 @@ The platform provides multidimensional data exploration through interactive char
 
 Built using Next.js, TypeScript, Tailwind CSS, Recharts, Node.js, Express.js, MongoDB, and Mongoose.
 
+## Live Demo
+
+Frontend: https://visualization-dashboard-wine.vercel.app/
+
+Backend API: https://visualization-dashboard-566p.onrender.com/
+
 ---
 
 ## Table of Contents
