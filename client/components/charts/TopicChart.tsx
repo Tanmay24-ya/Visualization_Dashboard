@@ -41,10 +41,10 @@ export default function TopicChart({
           <YAxis tick={{ fill: "#94a3b8" }} />
           <Tooltip
             contentStyle={{
-              background: "#0f172a",
-              border: "1px solid #334155",
+              background: "var(--recharts-tooltip-bg)",
+              border: "1px solid var(--recharts-tooltip-border)",
               borderRadius: "8px",
-              color: "#f8fafc",
+              color: "var(--recharts-tooltip-text)",
             }}
             cursor={{ fill: "rgba(255, 255, 255, 0.05)" }}
           />

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Insight } from "@/types/insight";
-import { BarChart2, Download, Globe, Layers, TrendingUp, Users, Sliders } from "lucide-react";
+import { BarChart2, Download, Globe, Layers, TrendingUp, Users, Sliders, Sun, Moon } from "lucide-react";
 
 import StatCard      from "./StatCard";
 import FilterBar     from "./FilterBar";
@@ -58,6 +58,30 @@ function exportCSV(data: Insight[]) {
 export default function Dashboard() {
   const [allData, setAllData] = useState<Insight[]>([]);
   const [loading, setLoading] = useState(true);
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") as "dark" | "light" | null;
+    if (savedTheme) {
+      setTheme(savedTheme);
+      if (savedTheme === "light") {
+        document.documentElement.classList.add("light");
+      } else {
+        document.documentElement.classList.remove("light");
+      }
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === "dark" ? "light" : "dark";
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+    if (newTheme === "light") {
+      document.documentElement.classList.add("light");
+    } else {
+      document.documentElement.classList.remove("light");
+    }
+  };
 
   // Drill-down drawer state
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -193,10 +217,10 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white font-sans selection:bg-indigo-500/30 selection:text-indigo-200">
+    <div className="min-h-screen font-sans selection:bg-indigo-500/30 selection:text-indigo-200" style={{ backgroundColor: 'var(--background)', color: 'var(--foreground)', transition: 'background-color 0.3s ease, color 0.3s ease' }}>
 
       {/* ── Top Header ── */}
-      <header className="sticky top-0 z-20 border-b border-slate-800 bg-slate-950/90 backdrop-blur">
+      <header className="sticky top-0 z-20 border-b backdrop-blur" style={{ backgroundColor: 'var(--background)', borderColor: 'var(--recharts-tooltip-border)', transition: 'background-color 0.3s ease' }}>
         <div className="mx-auto flex max-w-[1600px] items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600 shadow-lg shadow-indigo-600/20">
@@ -209,13 +233,23 @@ export default function Dashboard() {
               <p className="text-xs text-slate-400">Global Intelligence Overview</p>
             </div>
           </div>
-          <button
-            onClick={() => exportCSV(filteredData)}
-            className="flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs font-semibold text-slate-200 hover:bg-slate-700 hover:border-slate-600 transition-all"
-          >
-            <Download size={13} />
-            Export CSV
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={toggleTheme}
+              className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-700 bg-slate-800 text-slate-200 hover:bg-slate-700 hover:text-slate-100 transition-all cursor-pointer"
+              title="Toggle Day/Night Mode"
+              aria-label="Toggle Day/Night Mode"
+            >
+              {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
+            <button
+              onClick={() => exportCSV(filteredData)}
+              className="flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs font-semibold text-slate-200 hover:bg-slate-700 hover:border-slate-600 transition-all cursor-pointer"
+            >
+              <Download size={13} />
+              Export CSV
+            </button>
+          </div>
         </div>
       </header>
 

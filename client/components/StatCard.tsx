@@ -37,7 +37,7 @@ export default function StatCard({ title, value, sub, detail, icon, accent = "#6
         )}
       </div>
 
-      <p className="mt-3 text-3xl font-bold tracking-tight text-white transition-all group-hover:text-slate-100">
+      <p className="mt-3 text-3xl font-bold tracking-tight text-slate-100 transition-all group-hover:text-slate-200">
         {value}
       </p>
 

@@ -43,7 +43,7 @@ export default function CountryChart({
             if (name && onCountrySelect) onCountrySelect(name);
           }}
         >
-          <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--recharts-grid)" />
           <XAxis type="number" tick={{ fill: "#94a3b8" }} />
           <YAxis
             dataKey="country"
@@ -53,10 +53,10 @@ export default function CountryChart({
           />
           <Tooltip
             contentStyle={{
-              background: "#0f172a",
-              border: "1px solid #334155",
+              background: "var(--recharts-tooltip-bg)",
+              border: "1px solid var(--recharts-tooltip-border)",
               borderRadius: "8px",
-              color: "#f8fafc",
+              color: "var(--recharts-tooltip-text)",
             }}
             cursor={{ fill: "rgba(255, 255, 255, 0.05)" }}
           />

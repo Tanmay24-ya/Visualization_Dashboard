@@ -47,10 +47,10 @@ export default function SectorChart({
           </Pie>
           <Tooltip
             contentStyle={{
-              background: "#0f172a",
-              border: "1px solid #334155",
+              background: "var(--recharts-tooltip-bg)",
+              border: "1px solid var(--recharts-tooltip-border)",
               borderRadius: "8px",
-              color: "#f8fafc",
+              color: "var(--recharts-tooltip-text)",
             }}
           />
           <Legend />

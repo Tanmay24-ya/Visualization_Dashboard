@@ -17,8 +17,8 @@ function PearsonCell({ val }: MatrixCellProps) {
       className="flex h-10 w-16 items-center justify-center rounded font-semibold text-sm transition-transform hover:scale-105"
       style={{
         background: color,
-        color: Math.abs(val) > 0.4 ? "#ffffff" : "#94a3b8",
-        border: `1px solid rgba(255, 255, 255, 0.05)`,
+        color: Math.abs(val) > 0.4 ? "#ffffff" : "var(--slate-400)",
+        border: `1px solid var(--panel-border)`,
       }}
       title={`Correlation: ${val.toFixed(3)}`}
     >

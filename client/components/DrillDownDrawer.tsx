@@ -82,7 +82,7 @@ export default function DrillDownDrawer({
       />
 
       {/* Slide-out Drawer */}
-      <div className="fixed inset-y-0 right-0 z-50 flex w-full max-w-lg flex-col border-l border-slate-800 bg-slate-900 text-white shadow-2xl transition-transform duration-300 translate-x-0">
+      <div className="drawer-bg fixed inset-y-0 right-0 z-50 flex w-full max-w-lg flex-col border-l border-slate-800 bg-slate-900 text-slate-100 shadow-2xl transition-transform duration-300 translate-x-0">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-slate-800 p-6">
           <div>

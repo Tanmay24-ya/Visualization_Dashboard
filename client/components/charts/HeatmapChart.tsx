@@ -106,8 +106,8 @@ export default function HeatmapChart({
                       <div
                         className="flex h-8 items-center justify-center rounded text-center font-medium transition-transform hover:scale-110 cursor-default"
                         style={{
-                          background: val > 0 ? `${colorBase}${Math.max(0.08, intensity)})` : "rgba(30,41,59,0.5)",
-                          color: intensity > 0.5 ? "#fff" : intensity > 0.15 ? "#cbd5e1" : "#475569",
+                          background: val > 0 ? `${colorBase}${Math.max(0.08, intensity)})` : "var(--slate-900)",
+                          color: intensity > 0.5 ? "#fff" : "var(--slate-200)",
                           border: val > 0 ? `1px solid ${colorBase}0.3)` : "1px solid transparent",
                         }}
                         title={`${r} × ${t}: ${val}`}

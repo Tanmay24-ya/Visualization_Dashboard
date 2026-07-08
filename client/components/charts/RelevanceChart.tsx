@@ -35,7 +35,7 @@ export default function RelevanceChart({
       <p className="mb-4 text-xs text-slate-500">Click a bubble to filter by its topic</p>
       <ResponsiveContainer width="100%" height="85%">
         <ScatterChart>
-          <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--recharts-grid)" />
           <XAxis
             type="number"
             dataKey="likelihood"
@@ -59,10 +59,10 @@ export default function RelevanceChart({
           <Tooltip
             cursor={{ strokeDasharray: "3 3" }}
             contentStyle={{
-              background: "#0f172a",
-              border: "1px solid #334155",
+              background: "var(--recharts-tooltip-bg)",
+              border: "1px solid var(--recharts-tooltip-border)",
               borderRadius: "8px",
-              color: "#f8fafc",
+              color: "var(--recharts-tooltip-text)",
             }}
           />
           <Scatter
